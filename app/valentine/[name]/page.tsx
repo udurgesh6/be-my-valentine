@@ -73,7 +73,8 @@ export default function ValentinePage() {
   const searchParams = useSearchParams()
   const name = decodeURIComponent(params.name as string)
   const day = (searchParams.get('day') || 'valentine') as keyof typeof valentineDays
-  
+  const sender = searchParams.get('sender') ? decodeURIComponent(searchParams.get('sender')!) : null
+
   const [currentStep, setCurrentStep] = useState(0)
   const [yesClicked, setYesClicked] = useState(false)
   const [noHoverPosition, setNoHoverPosition] = useState({ x: 0, y: 0 })
@@ -82,7 +83,7 @@ export default function ValentinePage() {
   const isComplete = yesClicked && currentStep >= funnyMessages.length - 1
 
   if (isComplete) {
-    return <ValentineSuccess name={name} day={day} />
+    return <ValentineSuccess name={name} day={day} sender={sender} />
   }
 
   return (
@@ -99,6 +100,11 @@ export default function ValentinePage() {
           <p className="text-sm font-semibold text-primary/70 mb-2 uppercase tracking-wide">
             {currentDay.subtitle}
           </p>
+          {sender && currentStep === 0 && (
+            <p className="text-md text-primary/60 mb-3 font-medium">
+              💌 From {sender}
+            </p>
+          )}
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 text-pretty">
             {currentStep === 0
               ? `${name}, ${currentDay.title.toLowerCase()}`
@@ -107,6 +113,11 @@ export default function ValentinePage() {
           <p className="text-lg text-muted-foreground">
             {currentStep === 0 ? 'Please choose wisely 😊' : 'Be honest! 🥰'}
           </p>
+          {sender && currentStep === 0 && (
+            <p className="text-md text-primary/50 mt-4 italic">
+              — with love, from {sender} 💕
+            </p>
+          )}
         </div>
 
         {/* Buttons */}
