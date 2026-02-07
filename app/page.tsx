@@ -20,6 +20,7 @@ const valentineDays = [
 
 export default function Home() {
   const [name, setName] = useState('')
+  const [senderName, setSenderName] = useState('')
   const [selectedDay, setSelectedDay] = useState('valentine')
   const [link, setLink] = useState('')
   const [copied, setCopied] = useState(false)
@@ -28,8 +29,17 @@ export default function Home() {
     if (name.trim()) {
       const encodedName = encodeURIComponent(name)
       const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-      const dayParam = selectedDay !== 'valentine' ? `?day=${selectedDay}` : ''
-      const fullLink = `${baseUrl}/valentine/${encodedName}${dayParam}`
+
+      const params = new URLSearchParams()
+      if (selectedDay !== 'valentine') {
+        params.set('day', selectedDay)
+      }
+      if (senderName.trim()) {
+        params.set('sender', senderName.trim())
+      }
+
+      const queryString = params.toString()
+      const fullLink = `${baseUrl}/valentine/${encodedName}${queryString ? `?${queryString}` : ''}`
       setLink(fullLink)
     }
   }
@@ -87,6 +97,21 @@ export default function Home() {
               placeholder="Your special someone's name..."
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="h-12 text-lg rounded-lg border-2 border-secondary focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label htmlFor="senderName" className="block text-lg font-semibold text-primary">
+              Your name <span className="text-sm font-normal text-muted-foreground">(optional)</span>:
+            </label>
+            <Input
+              id="senderName"
+              type="text"
+              placeholder="Enter your name..."
+              value={senderName}
+              onChange={(e) => setSenderName(e.target.value)}
               onKeyPress={handleKeyPress}
               className="h-12 text-lg rounded-lg border-2 border-secondary focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
