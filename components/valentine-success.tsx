@@ -7,20 +7,21 @@ import { Button } from '@/components/ui/button'
 interface ValentineSuccessProps {
   name: string
   day?: string
+  sender?: string | null
 }
 
 const dayMessages = {
   rose: {
     emoji: '🌹',
     title: 'You accepted!',
-    message: 'You accepted the rose! This beautiful beginning means the world to me.',
+    message: 'You accepted the rose! This beautiful beginning means the world.',
     subtitle: 'Our love story starts with a rose',
     hearts: ['🌹', '💕', '🌹']
   },
   propose: {
     emoji: '💍',
     title: 'You said YES!',
-    message: 'You said yes to my proposal! I promise to cherish you forever.',
+    message: 'You said yes to the proposal! A promise to cherish you forever.',
     subtitle: 'Forever starts now',
     hearts: ['💍', '💕', '💍']
   },
@@ -34,41 +35,41 @@ const dayMessages = {
   teddy: {
     emoji: '🧸',
     title: 'Cuddle Buddy!',
-    message: 'You want to cuddle! I can\'t wait to hold you close.',
+    message: 'You want to cuddle! Can\'t wait to hold you close.',
     subtitle: 'Warm hugs await',
     hearts: ['🧸', '💕', '🧸']
   },
   promise: {
     emoji: '🤝',
     title: 'You Promised!',
-    message: 'You made a promise to be mine! I\'ll keep my promises to you always.',
+    message: 'You made a promise to be together! Those promises will be kept always.',
     subtitle: 'A bond that lasts forever',
     hearts: ['🤝', '💕', '🤝']
   },
   hug: {
     emoji: '🤗',
     title: 'Hug Accepted!',
-    message: 'You want a hug! Your embrace is my favorite place to be.',
+    message: 'You want a hug! Your embrace is the favorite place to be.',
     subtitle: 'Wrapped in your love',
     hearts: ['🤗', '💕', '🤗']
   },
   kiss: {
     emoji: '💋',
     title: 'Kiss Me!',
-    message: 'You accepted the kiss! Every moment with you is magical.',
+    message: 'You accepted the kiss! Every moment together is magical.',
     subtitle: 'Sealed with a kiss',
     hearts: ['💋', '💕', '💋']
   },
   valentine: {
     emoji: '💝',
     title: 'Yes!',
-    message: 'You\'ve made me the happiest person in the world! 💕',
-    subtitle: 'You mean everything to me!',
+    message: 'You\'ve made this the happiest day ever! 💕',
+    subtitle: 'You mean everything!',
     hearts: ['💕', '💗', '💝']
   }
 }
 
-export default function ValentineSuccess({ name, day = 'valentine' }: ValentineSuccessProps) {
+export default function ValentineSuccess({ name, day = 'valentine', sender }: ValentineSuccessProps) {
   const [confetti, setConfetti] = useState(false)
   const [hearts, setHearts] = useState<Array<{
     left: number
@@ -82,7 +83,7 @@ export default function ValentineSuccess({ name, day = 'valentine' }: ValentineS
 
   useEffect(() => {
     setConfetti(true)
-    
+
     // Generate hearts only on client side to avoid hydration mismatch
     const celebrationEmojis = ['💕', '💗', '💝', '💘', '🎉', currentDay.emoji]
     const generatedHearts = Array.from({ length: 20 }).map(() => ({
@@ -138,7 +139,7 @@ export default function ValentineSuccess({ name, day = 'valentine' }: ValentineS
             {currentDay.title}
           </h1>
           <p className="text-2xl md:text-3xl text-muted-foreground mb-6">
-            {name}, I&apos;m so happy!
+            {name}, {sender ? `${sender} is` : "I'm"} so happy!
           </p>
         </div>
 
@@ -159,6 +160,11 @@ export default function ValentineSuccess({ name, day = 'valentine' }: ValentineS
           <p className="text-lg text-muted-foreground">
             {currentDay.subtitle}
           </p>
+          {sender && (
+            <p className="text-lg text-primary/70 pt-2 italic">
+              Forever yours, {sender} 💕
+            </p>
+          )}
         </div>
 
         {/* Decorative footer */}
